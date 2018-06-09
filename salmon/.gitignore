@@ -1,0 +1,17 @@
+
+###> phpstorm ###
+/.idea
+###< phpstorm ###
+
+###> symfony/framework-bundle ###
+/.env
+/public/bundles/
+/var/
+/vendor/
+/bin/*
+!/bin/console
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###

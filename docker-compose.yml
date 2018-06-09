@@ -1,0 +1,50 @@
+version: '3'
+services:
+  api:
+    build: build/php
+    container_name: salmon_api
+    expose:
+      - '9000'
+    # depends_on:
+     # - db
+    volumes:
+      - ./:/var/www/html/symfony:delegated
+      - ./logs:/var/log:delegated
+
+  nginx:
+    build: build/nginx
+    container_name: salmon_nginx
+    restart: always
+    ports:
+        - "8000:80"
+        - "9090:9000"
+    depends_on:
+        - api
+        - beanstalk
+       # - db
+    volumes:
+        - ./:/var/www/html/symfony:delegated
+        - ./logs:/var/log/nginx:delegated
+
+  beanstalk:
+    build: build/beanstalk
+    container_name: salmon_beanstalk
+    restart: always
+    ports:
+      - "11300:11300"
+    expose:
+      - '11300'
+    volumes:
+      - ./:/var/www/html/symfony:delegated
+
+  #db:
+  #  image: mysql/mysql-server:latest
+  #  container_name: salmon_db
+  #  environment:
+  #    - MYSQL_DATABASE=${MYSQL_DATABASE}
+  #    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  #    - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
+  #  ports:
+  #    - "3307:3306"
+  #  volumes:
+  #    - ./mysql:/var/lib/mysql
